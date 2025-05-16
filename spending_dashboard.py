@@ -57,7 +57,7 @@ if uploaded_file is not None:
                 if not non_empty_texts:
                     st.error("No readable text found in the PDF.")
                     raise ValueError("Empty PDF content")
-               all_text = '\n'.join(non_empty_texts)
+            all_text = '\n'.join(non_empty_texts)
             st.subheader("📝 Extracted Text from PDF")
             st.text(all_text)
 
