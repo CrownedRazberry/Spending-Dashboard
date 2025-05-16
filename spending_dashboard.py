@@ -52,9 +52,23 @@ if uploaded_file is not None:
     try:
         if uploaded_file.name.endswith(".pdf"):
             with pdfplumber.open(uploaded_file) as pdf:
-                first_page = pdf.pages[0]
-                text = first_page.extract_text()
-            df = pd.read_csv(StringIO(text), encoding_errors='ignore')
+                texts = [page.extract_text() for page in pdf.pages]
+                non_empty_texts = [t for t in texts if t]
+                if not non_empty_texts:
+                    st.error("No readable text found in the PDF.")
+                    raise ValueError("Empty PDF content")
+                all_text = '
+'.join(non_empty_texts)
+            st.subheader("📝 Extracted Text from PDF")
+            st.text(all_text)
+
+            # --- Clean up extracted text ---
+            lines = all_text.split('
+')  # fixed newline syntax
+            cleaned_lines = [line for line in lines if line.count(',') >= 2]
+            cleaned_text = '
+'.join(cleaned_lines)
+            df = pd.read_csv(StringIO(cleaned_text), encoding_errors='ignore', on_bad_lines='skip')
         else:
             df = pd.read_csv(uploaded_file)
 
