@@ -9,7 +9,7 @@ st.title("💳 Personal Spending Dashboard")
 st.write("Upload a CSV of your transactions to view your spending habits.")
 
 # --- File Upload ---
-uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+uploaded_file = st.file_uploader("Upload your CSV or PDF file", type=["csv", "pdf"])
 
 # --- OpenAI API Setup ---
 openai_api_key = st.text_input("Enter your OpenAI API Key", type="password")
