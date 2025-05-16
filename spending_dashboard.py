@@ -1,7 +1,6 @@
-
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 import openai
 
 # --- Streamlit Page Setup ---
@@ -71,14 +70,13 @@ if uploaded_file is not None:
             expense_df["Amount"] = expense_df["Amount"].abs()
 
             # Group and plot
-            category_summary = expense_df.groupby("Category")["Amount"].sum()
+            category_summary = expense_df.groupby("Category")["Amount"].sum().reset_index()
 
             st.subheader("📊 Spending by Category")
-            fig, ax = plt.subplots()
-            category_summary.plot(kind='pie', autopct='%1.1f%%', ax=ax)
-            ax.set_ylabel("")
-            st.pyplot(fig)
+            fig = px.pie(category_summary, names="Category", values="Amount", title="Spending by Category")
+            st.plotly_chart(fig)
     except Exception as e:
         st.error(f"Error reading file: {e}")
 else:
     st.info("Please upload a CSV file to get started.")
+
