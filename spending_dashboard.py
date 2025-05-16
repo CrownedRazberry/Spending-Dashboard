@@ -57,7 +57,7 @@ if uploaded_file is not None:
                 if not non_empty_texts:
                     st.error("No readable text found in the PDF.")
                     raise ValueError("Empty PDF content")
-            all_text = '\n'.join(non_empty_texts)
+              all_text = '\n'.join(non_empty_texts)
             st.subheader("📝 Extracted Text from PDF")
             st.text(all_text)
 
@@ -65,8 +65,7 @@ if uploaded_file is not None:
             lines = all_text.split('
 ')  # fixed newline syntax
             cleaned_lines = [line for line in lines if line.count(',') >= 2]
-            cleaned_text = '
-'.join(cleaned_lines)
+            cleaned_text = '\n'.join(cleaned_lines)
             df = pd.read_csv(StringIO(cleaned_text), encoding_errors='ignore', on_bad_lines='skip')
         else:
             df = pd.read_csv(uploaded_file)
