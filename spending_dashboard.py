@@ -45,9 +45,17 @@ def rule_based_categorize(desc):
     return "Other"
 
 # --- Process Uploaded File ---
+from io import StringIO
+import pdfplumber
 if uploaded_file is not None:
     try:
-        df = pd.read_csv(uploaded_file)
+        if uploaded_file.name.endswith(".pdf"):
+                with pdfplumber.open(uploaded_file) as pdf:
+                    first_page = pdf.pages[0]
+                    text = first_page.extract_text()
+                df = pd.read_csv(StringIO(text), encoding_errors='ignore')
+            else:
+                df = pd.read_csv(uploaded_file)
 
         # Basic structure check
         required_columns = {"Date", "Description", "Amount"}
@@ -79,4 +87,3 @@ if uploaded_file is not None:
         st.error(f"Error reading file: {e}")
 else:
     st.info("Please upload a CSV file to get started.")
-
